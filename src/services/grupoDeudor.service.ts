@@ -4,8 +4,7 @@
 // =============================================
 
 import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5096/api';
+import { API_BASE_URL } from './api';
 
 // =============================================
 // Types
@@ -79,7 +78,7 @@ const getAuthHeader = () => {
 export const grupoDeudorService = {
   // Obtener todos los grupos
   getAll: async (): Promise<GrupoDeudorDto[]> => {
-    const response = await axios.get(`${API_URL}/grupos-deudor`, {
+    const response = await axios.get(`${API_BASE_URL}/grupos-deudor`, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -87,7 +86,7 @@ export const grupoDeudorService = {
 
   // Buscar grupos
   search: async (term: string): Promise<GrupoDeudorDto[]> => {
-    const response = await axios.get(`${API_URL}/grupos-deudor/search`, {
+    const response = await axios.get(`${API_BASE_URL}/grupos-deudor/search`, {
       params: { term },
       headers: getAuthHeader()
     });
@@ -96,7 +95,7 @@ export const grupoDeudorService = {
 
   // Obtener un grupo por RUT
   getByRut: async (rut: number): Promise<GrupoDeudorDto> => {
-    const response = await axios.get(`${API_URL}/grupos-deudor/${rut}`, {
+    const response = await axios.get(`${API_BASE_URL}/grupos-deudor/${rut}`, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -104,7 +103,7 @@ export const grupoDeudorService = {
 
   // Obtener cupo del grupo
   getCupo: async (rut: number): Promise<CupoGrupoDto> => {
-    const response = await axios.get(`${API_URL}/grupos-deudor/${rut}/cupo`, {
+    const response = await axios.get(`${API_BASE_URL}/grupos-deudor/${rut}/cupo`, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -112,7 +111,7 @@ export const grupoDeudorService = {
 
   // Crear grupo
   create: async (dto: CreateGrupoDeudorDto): Promise<GrupoDeudorDto> => {
-    const response = await axios.post(`${API_URL}/grupos-deudor`, dto, {
+    const response = await axios.post(`${API_BASE_URL}/grupos-deudor`, dto, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -120,7 +119,7 @@ export const grupoDeudorService = {
 
   // Actualizar grupo
   update: async (rut: number, dto: updateGrupoDeudorDto): Promise<GrupoDeudorDto> => {
-    const response = await axios.put(`${API_URL}/grupos-deudor/${rut}`, dto, {
+    const response = await axios.put(`${API_BASE_URL}/grupos-deudor/${rut}`, dto, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -128,7 +127,7 @@ export const grupoDeudorService = {
 
   // Eliminar grupo
   delete: async (rut: number): Promise<void> => {
-    await axios.delete(`${API_URL}/grupos-deudor/${rut}`, {
+    await axios.delete(`${API_BASE_URL}/grupos-deudor/${rut}`, {
       headers: getAuthHeader()
     });
   }
@@ -141,7 +140,7 @@ export const grupoDeudorService = {
 export const deudorGrupoService = {
   // Obtener deudores de un grupo
   getByGrupo: async (rutGrupo: number): Promise<DeudorGrupoDto[]> => {
-    const response = await axios.get(`${API_URL}/grupos-deudor/${rutGrupo}/deudores`, {
+    const response = await axios.get(`${API_BASE_URL}/grupos-deudor/${rutGrupo}/deudores`, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -150,7 +149,7 @@ export const deudorGrupoService = {
   // Agregar deudor a un grupo
   add: async (rutGrupo: number, rutDeudor: number): Promise<DeudorGrupoDto> => {
     const response = await axios.post(
-      `${API_URL}/grupos-deudor/${rutGrupo}/deudores`,
+      `${API_BASE_URL}/grupos-deudor/${rutGrupo}/deudores`,
       { rutGrupo, rutDeudor },
       { headers: getAuthHeader() }
     );
@@ -159,14 +158,14 @@ export const deudorGrupoService = {
 
   // Eliminar deudor de un grupo por ID
   deleteById: async (rutGrupo: number, id: number): Promise<void> => {
-    await axios.delete(`${API_URL}/grupos-deudor/${rutGrupo}/deudores/${id}`, {
+    await axios.delete(`${API_BASE_URL}/grupos-deudor/${rutGrupo}/deudores/${id}`, {
       headers: getAuthHeader()
     });
   },
 
   // Eliminar deudor de un grupo por RUT
   deleteByRut: async (rutGrupo: number, rutDeudor: number): Promise<void> => {
-    await axios.delete(`${API_URL}/grupos-deudor/${rutGrupo}/deudores/rut/${rutDeudor}`, {
+    await axios.delete(`${API_BASE_URL}/grupos-deudor/${rutGrupo}/deudores/rut/${rutDeudor}`, {
       headers: getAuthHeader()
     });
   }

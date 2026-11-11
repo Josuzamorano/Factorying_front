@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -61,8 +62,6 @@ interface Resumen {
   porEstado: { [key: string]: { estadoCobranza: number; descripcionEstado: string; cantidadDocumentos: number; monto: number } };
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
 /**
  * Página de Estados de Cobranza - Migrada de F_GC2600.frm (VB6)
  */
@@ -95,7 +94,7 @@ const EstadosCobranza: React.FC = () => {
         rutCliente: rutCliente ? parseInt(rutCliente) : null,
       };
 
-      const response = await fetch(`${API_URL}/recaudacion/estados`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/estados`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +111,7 @@ const EstadosCobranza: React.FC = () => {
       }
 
       // Obtener resumen
-      const resumenResponse = await fetch(`${API_URL}/recaudacion/estados/resumen`, {
+      const resumenResponse = await fetch(`${API_BASE_URL}/recaudacion/estados/resumen`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

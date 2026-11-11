@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -66,8 +67,6 @@ interface DetalleDocumento {
   deudaNeta: number;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
 /**
  * Página de Deuda Total Cliente - Migrada de F_GC2200.frm (VB6)
  */
@@ -97,7 +96,7 @@ const DeudaTotalCliente: React.FC = () => {
       setError(null);
 
       // Obtener deuda total
-      const response = await fetch(`${API_URL}/recaudacion/deuda-total/${rutCliente}`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/deuda-total/${rutCliente}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
 
@@ -124,7 +123,7 @@ const DeudaTotalCliente: React.FC = () => {
   const cargarDetalles = async (rut: number) => {
     try {
       // Facturas (tipo 1)
-      const facResponse = await fetch(`${API_URL}/recaudacion/deuda-total/${rut}/detalle/1`, {
+      const facResponse = await fetch(`${API_BASE_URL}/recaudacion/deuda-total/${rut}/detalle/1`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (facResponse.ok) {
@@ -132,7 +131,7 @@ const DeudaTotalCliente: React.FC = () => {
       }
 
       // Cheques (tipo 2)
-      const cheResponse = await fetch(`${API_URL}/recaudacion/deuda-total/${rut}/detalle/2`, {
+      const cheResponse = await fetch(`${API_BASE_URL}/recaudacion/deuda-total/${rut}/detalle/2`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (cheResponse.ok) {
@@ -140,7 +139,7 @@ const DeudaTotalCliente: React.FC = () => {
       }
 
       // Letras (tipo 3)
-      const letResponse = await fetch(`${API_URL}/recaudacion/deuda-total/${rut}/detalle/3`, {
+      const letResponse = await fetch(`${API_BASE_URL}/recaudacion/deuda-total/${rut}/detalle/3`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (letResponse.ok) {
@@ -148,7 +147,7 @@ const DeudaTotalCliente: React.FC = () => {
       }
 
       // Otros (tipo 4)
-      const otroResponse = await fetch(`${API_URL}/recaudacion/deuda-total/${rut}/detalle/4`, {
+      const otroResponse = await fetch(`${API_BASE_URL}/recaudacion/deuda-total/${rut}/detalle/4`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (otroResponse.ok) {

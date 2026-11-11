@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -91,8 +92,6 @@ interface EstadoCobranza {
   descripcion: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
 /**
  * Página de Gestión de Cobranza Telefónica - Migrada de F_GC1100.frm (VB6)
  */
@@ -177,7 +176,7 @@ const GestionCobranza: React.FC = () => {
 
   const cargarCobradores = async () => {
     try {
-      const response = await fetch(`${API_URL}/recaudacion/cobradores/activos`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/cobradores/activos`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (response.ok) {
@@ -192,7 +191,7 @@ const GestionCobranza: React.FC = () => {
   const cargarDeudores = async (codigoCobrador: string) => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/recaudacion/gestiones/deudores/${codigoCobrador}`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/gestiones/deudores/${codigoCobrador}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (response.ok) {
@@ -209,7 +208,7 @@ const GestionCobranza: React.FC = () => {
   const cargarClientes = async (codigoCobrador: string, rutDeudor: number) => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/recaudacion/gestiones/clientes/${codigoCobrador}/${rutDeudor}`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/gestiones/clientes/${codigoCobrador}/${rutDeudor}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (response.ok) {
@@ -226,7 +225,7 @@ const GestionCobranza: React.FC = () => {
   const cargarDocumentos = async (rutCliente: number, rutDeudor: number) => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/recaudacion/gestiones/documentos/${rutCliente}/${rutDeudor}`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/gestiones/documentos/${rutCliente}/${rutDeudor}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (response.ok) {
@@ -250,7 +249,7 @@ const GestionCobranza: React.FC = () => {
         tipoDocumento: doc.tipoDocumento.toString(),
         numeroDocumento: doc.numeroDocumento.toString(),
       });
-      const response = await fetch(`${API_URL}/recaudacion/gestiones/historial?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/gestiones/historial?${params}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (response.ok) {
@@ -294,7 +293,7 @@ const GestionCobranza: React.FC = () => {
         codigoRecaudador: cobradorSeleccionado,
       };
 
-      const response = await fetch(`${API_URL}/recaudacion/gestiones`, {
+      const response = await fetch(`${API_BASE_URL}/recaudacion/gestiones`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

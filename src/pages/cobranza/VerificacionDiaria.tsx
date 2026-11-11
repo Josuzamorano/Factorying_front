@@ -48,6 +48,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/es';
+import { API_BASE_URL } from '../../services/api';
 
 // Tipos
 interface VerificacionDiaria {
@@ -120,8 +121,6 @@ const ESTADOS_VERIFICACION = [
   { id: 5, descripcion: 'Rechaza Documento', color: 'error' },
   { id: 6, descripcion: 'Promete Pago', color: 'success' },
 ];
-
-const API_BASE_URL = 'http://localhost:5000/api';
 
 /**
  * Página de Verificación Diaria - Migrada de F_CO2510.frm (VB6)

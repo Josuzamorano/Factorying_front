@@ -42,6 +42,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/es';
+import { API_BASE_URL } from '../../services/api';
 
 // Tipos
 interface DocumentoNoCedido {
@@ -84,8 +85,6 @@ interface RegistrarNoCedidoDto {
   numeroOperacion: number;
   motivo: string;
 }
-
-const API_BASE_URL = 'http://localhost:5000/api';
 
 /**
  * Formatea un número como moneda chilena
