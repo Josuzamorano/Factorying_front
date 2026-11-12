@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isAxiosError } from 'axios';
 import {
   Box,
   AppBar,
@@ -47,6 +48,22 @@ interface PerfilDto {
   descripcion: string;
 }
 
+interface ApiErrorResponse {
+  mensaje?: unknown;
+  errores?: unknown;
+}
+
+const getApiErrorMessage = (error: unknown, fallback: string): string => {
+  if (!isAxiosError<ApiErrorResponse>(error)) return fallback;
+
+  const data = error.response?.data;
+  const message = typeof data?.mensaje === 'string' ? data.mensaje : '';
+  const details = Array.isArray(data?.errores)
+    ? data.errores.filter((item): item is string => typeof item === 'string')
+    : [];
+  return [message, ...details].filter(Boolean).join(': ') || fallback;
+};
+
 /**
  * Página de Usuarios - Migrada de F_MA1700.frm (VB6)
  * CRUD completo de usuarios del sistema
@@ -84,20 +101,16 @@ const Usuarios: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const [usuariosData, sucursalesData] = await Promise.all([
+      const [usuariosData, sucursalesData, perfilesData] = await Promise.all([
         usuarioService.getAll(),
         sucursalService.getActivos(),
+        usuarioService.getPerfiles(),
       ]);
       setUsuarios(usuariosData);
       setSucursales(sucursalesData);
-      // Perfiles hardcodeados por ahora (deberían venir de API)
-      setPerfiles([
-        { codigo: 1, descripcion: 'Administrador' },
-        { codigo: 2, descripcion: 'Ejecutivo' },
-        { codigo: 3, descripcion: 'Consulta' },
-      ]);
+      setPerfiles(perfilesData);
     } catch (err) {
-      setError('Error al cargar los datos');
+      setError(getApiErrorMessage(err, 'Error al cargar los datos'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -137,9 +150,9 @@ const Usuarios: React.FC = () => {
       await loadData();
       setConfirmOpen(false);
       setUsuarioToDelete(null);
-      setSuccessMsg('Usuario eliminado correctamente');
+      setSuccessMsg('Usuario desactivado correctamente');
     } catch (err) {
-      setError('Error al eliminar el usuario');
+      setError(getApiErrorMessage(err, 'Error al desactivar el usuario'));
       console.error(err);
     }
   };
@@ -189,7 +202,10 @@ const Usuarios: React.FC = () => {
       setDialogOpen(false);
       setSuccessMsg(`Usuario ${dialogMode === 'create' ? 'creado' : 'actualizado'} correctamente`);
     } catch (err) {
-      setError(`Error al ${dialogMode === 'create' ? 'crear' : 'actualizar'} el usuario`);
+      setError(getApiErrorMessage(
+        err,
+        `Error al ${dialogMode === 'create' ? 'crear' : 'actualizar'} el usuario`,
+      ));
       console.error(err);
     } finally {
       setSaving(false);
@@ -212,7 +228,7 @@ const Usuarios: React.FC = () => {
       setNewPassword('');
       setSuccessMsg('Password reseteado correctamente');
     } catch (err) {
-      setError('Error al resetear el password');
+      setError(getApiErrorMessage(err, 'Error al resetear el password'));
       console.error(err);
     }
   };
@@ -223,7 +239,7 @@ const Usuarios: React.FC = () => {
       await loadData();
       setSuccessMsg('Usuario desbloqueado correctamente');
     } catch (err) {
-      setError('Error al desbloquear el usuario');
+      setError(getApiErrorMessage(err, 'Error al desbloquear el usuario'));
       console.error(err);
     }
   };
@@ -453,7 +469,7 @@ const Usuarios: React.FC = () => {
             </TextField>
             <TextField
               label="Fecha Expiración"
-              type="Dayjs"
+              type="date"
               value={selectedUsuario.fechaExpiracion?.split('T')[0] || ''}
               onChange={(e) => setSelectedUsuario({ ...selectedUsuario, fechaExpiracion: e.target.value })}
               fullWidth
@@ -484,7 +500,7 @@ const Usuarios: React.FC = () => {
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Confirmar Eliminación</DialogTitle>
         <DialogContent>
-          <Typography>¿Está seguro que desea eliminar este usuario?</Typography>
+          <Typography>¿Está seguro que desea desactivar este usuario?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)}>Cancelar</Button>

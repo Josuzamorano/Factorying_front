@@ -91,6 +91,11 @@ export interface UsuarioDto {
   fechaCreacion: string;
 }
 
+export interface UsuarioActivoDto {
+  login: string;
+  nombre: string;
+}
+
 // =============================================
 // Servicio de Bancos - Migrado de F_MA1300.frm
 // =============================================
@@ -312,8 +317,13 @@ export const usuarioService = {
     return response.data;
   },
 
-  getActivos: async (): Promise<SelectItemDto[]> => {
-    const response = await api.get<SelectItemDto[]>('/usuarios/activos');
+  getPerfiles: async (): Promise<SelectItemDto[]> => {
+    const response = await api.get<SelectItemDto[]>('/usuarios/perfiles');
+    return response.data;
+  },
+
+  getActivos: async (): Promise<UsuarioActivoDto[]> => {
+    const response = await api.get<UsuarioActivoDto[]>('/usuarios/activos');
     return response.data;
   },
 
